@@ -8,17 +8,19 @@ const Layout = ({ children }) => {
   return (
     <div className="layout">
       <Head>
-        <title>MELTRON Store</title>
+        <title>JS Mastery Store</title>
       </Head>
       <header>
         <Navbar />
       </header>
-      <main className="main-container">{children}</main>
+      <main className="main-container">
+        {children}
+      </main>
       <footer>
         <Footer />
       </footer>
     </div>
-  );
-};
+  )
+}
 
-export default Layout;
+export default Layout
