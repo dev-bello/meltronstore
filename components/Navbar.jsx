@@ -11,7 +11,12 @@ const Navbar = () => {
   return (
     <div className="navbar-container">
       <p className="logo">
-        <Link href="/">MELTRON</Link>
+       
+        <Link href="/"> <img 
+        src='/meltron.jpg'
+        alt='meltron logo'
+        className='meltron-logo'
+        /> <h5 className='logo'>MELTRON</h5></Link>
       </p>
 
       <button

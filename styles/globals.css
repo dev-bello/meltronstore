@@ -16,6 +16,50 @@ a {
   text-decoration: none;
 }
 
+
+.payment-control {
+	padding-inline: 60px;
+	display: flex;
+	flex-direction: column;
+  margin-top: .9rem;
+}
+.payment-control h3{
+	justify-content: center;
+	display: flex;
+	align-items: center;
+	margin: 30px;
+}
+
+input,
+.btn-submit {
+	border-radius: 50px;
+	padding: 10px 15px;
+	margin-bottom: 20px;
+  margin-left: 2rem;
+	border: none;
+	outline: none;
+	font-size: 16px;
+	box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.btn-submit {
+	background: #1ed760;
+	text-transform: uppercase;
+	font-weight: bold;
+	color: #fff;
+	cursor: pointer;
+	margin-top: 5px;
+  padding: 10px 45px;
+}
+
+.meltron-logo{
+  border-radius: 30%;
+  width: 40px;
+  height: 40px;
+}
+
+
+
 .main-container {
   max-width: 1400px;
   margin: auto;

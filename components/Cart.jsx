@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import Link from 'next/link';
 import {
   AiOutlineMinus,
@@ -8,10 +8,10 @@ import {
 } from 'react-icons/ai';
 import { TiDeleteOutline } from 'react-icons/ti';
 import toast from 'react-hot-toast';
-
+import Script from 'next/script';
+import { handlePayment } from '../pages/api/paystack';
 import { useStateContext } from '../context/StateContext';
 import { urlFor } from '../lib/client';
-import getStripe from '../lib/getStripe';
 
 const Cart = () => {
   const cartRef = useRef();
@@ -23,28 +23,25 @@ const Cart = () => {
     toggleCartItemQuanitity,
     onRemove,
   } = useStateContext();
+  const [ data, setData ] = useState({});
 
-  const handleCheckout = async () => {
-    const stripe = await getStripe();
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        handlePayment(data.email, parseFloat(data.amount));
+    }
 
-    const response = await fetch('/api/stripe', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(cartItems),
-    });
+    const handleChange = (e) => {
+        setData({
+            ...data,
+            [ e.target.name ]: e.target.value
+        })
+    }
 
-    if (response.statusCode === 500) return;
-
-    const data = await response.json();
-
-    toast.loading('Redirecting...');
-
-    stripe.redirectToCheckout({ sessionId: data.id });
-  };
 
   return (
+    <>
+     <Script src="https://js.paystack.co/v1/inline.js"/>
+
     <div className="cart-wrapper" ref={cartRef}>
       <div className="cart-container">
         <button
@@ -74,6 +71,24 @@ const Cart = () => {
         )}
 
         <div className="product-container">
+
+        <div className='payment-control'>
+              <form type="form" onSubmit={handleSubmit}>
+            <h3 className="payment-form">Pay with PayStack</h3>
+                <div className="input-control">
+                   <label for="Email">Email</label>
+                   <input type="email" required name="email" placeholder="Your email.." onChange={handleChange}/>
+                </div>
+                 <div className="input-control">
+                   <label for="Amount">Amount (₦)</label>
+                     <input type="amount" name="amount" value={data.amount=totalPrice} onChange={handleChange}/>
+              <br></br>
+                   <button type="submit" className='btn-submit'>Pay Now</button>
+                </div>
+                            
+              </form>
+            </div>
+
           {cartItems.length >= 1 &&
             cartItems.map((item) => (
               <div className="product" key={item._id}>
@@ -128,15 +143,11 @@ const Cart = () => {
               <h3>Subtotal:</h3>
               <h3>₦ {totalPrice}</h3>
             </div>
-            <div className="btn-container">
-              <button type="button" className="btn" onClick={handleCheckout}>
-                Pay with Stripe
-              </button>
-            </div>
           </div>
         )}
       </div>
     </div>
+    </>
   );
 };
 
